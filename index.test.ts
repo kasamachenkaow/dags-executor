@@ -3,12 +3,17 @@ import { expect, test } from 'bun:test'
 import { addTaskChild, dagsExecutor } from './src/executor'
 
 test('dagsExecutor', async () => {
+  const results: string[] = []
   const task = async (args: { name: string }) => {
     console.log(`Hello, ${args.name}!`)
+
+    results.push(`task, ${args.name}`)
   }
 
   const task2 = async (args: { name: string; value: number }) => {
     console.log(`Hello, ${args.name} - ${args.value}!`)
+
+    results.push(`task2, ${args.name}, ${args.value}`)
   }
 
   const taskNode = {
@@ -36,5 +41,16 @@ test('dagsExecutor', async () => {
   addTaskChild(taskNode2, taskNode3)
 
   await dagsExecutor(taskNode)
-  expect(true).toBe(true)
+
+  expect(results).toEqual([
+    'task, Charlie',
+    'task, Charlie',
+    'task, Charlie',
+    'task, Charlie',
+    'task, Charlie',
+    'task, Charlie',
+    'task2, Bob, 42',
+    'task2, Bob, 42',
+    'task, Alice',
+  ])
 })
