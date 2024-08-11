@@ -1,6 +1,6 @@
 import { expect, test } from 'bun:test'
 
-import { addTaskChild, dagsExecutor } from './src/executor'
+import { addTaskChild, simpleDagsExecutor } from './simple-executor'
 
 test('dagsExecutor', async () => {
   const results: string[] = []
@@ -40,7 +40,7 @@ test('dagsExecutor', async () => {
   addTaskChild(taskNode2, taskNode3)
   addTaskChild(taskNode2, taskNode3)
 
-  await dagsExecutor(taskNode)
+  await simpleDagsExecutor(taskNode)
 
   expect(results).toEqual([
     'task, Charlie',
