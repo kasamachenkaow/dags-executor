@@ -1,4 +1,7 @@
 import { expect, test } from 'bun:test'
+import { promisify } from 'node:util'
+
+const setTimeoutPromise = promisify(setTimeout)
 
 import { addTaskChild, simpleDagsExecutor } from './simple-executor'
 
@@ -7,11 +10,15 @@ test('dagsExecutor', async () => {
   const task = async (args: { name: string }) => {
     console.log(`Hello, ${args.name}!`)
 
+    await setTimeoutPromise(5)
+
     results.push(`task, ${args.name}`)
   }
 
   const task2 = async (args: { name: string; value: number }) => {
     console.log(`Hello, ${args.name} - ${args.value}!`)
+
+    await setTimeoutPromise(5)
 
     results.push(`task2, ${args.name}, ${args.value}`)
   }
